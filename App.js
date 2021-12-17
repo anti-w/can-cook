@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {Text, View} from 'react-native';
 
 const App = () => {
@@ -7,6 +8,7 @@ const App = () => {
             <Text>Hello World</Text>
         </View>
     )
+
 }
 
 export default App;

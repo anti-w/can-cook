@@ -1,6 +1,36 @@
 {
   "dependencies": {
     "expo": "^43.0.4",
+    "express": "^4.17.1",
+    "puppeteer": "^13.0.0",
+    "react": "^17.0.2",
     "react-native": "^0.66.4"
+  },
+  "name": "can-cook",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anti-w/can-cook.git"
+  },
+  "keywords": [
+    "scrapping",
+    "tabela",
+    "nutricional",
+    "saude",
+    "educacional"
+  ],
+  "author": "Wendel Demetrio e Lucas Vilela",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anti-w/can-cook/issues"
+  },
+  "homepage": "https://github.com/anti-w/can-cook#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
