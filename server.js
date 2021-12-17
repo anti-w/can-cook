@@ -2,41 +2,48 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 
 const server = express();
+let x = 0
 
 server.get("/", async (req, res) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('http://www.tbca.net.br/base-dados/composicao_alimentos.php');
-  // await page.screenshot({ path: 'example1.png' });
+  const dataAll = []
 
-  const pageContent = await page.evaluate(() => {
+  for (var y = 1; y <= 53; y++) {
+    await page.goto(`http://www.tbca.net.br/base-dados/composicao_alimentos.php?pagina=${y}`);
 
-    const data = []
-    const val = []
+    const pageCt = await page.evaluate(() => {
 
-    for (var x = 0; x < 10; x++) {
+      const data = []
+      const val = []
+      const itensPage = document.documentElement.querySelectorAll('tbody tr').length
+      for (var x = 0; x < itensPage; x++) {
+        console.log(x)
+        const row = []
+        const dict = {}
+        for (var i = 0; i < 6; i++) {
+          row.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(i).innerText)
+          val.push(document.documentElement.querySelectorAll('thead tr th').item(i).innerText)
+          dict[val[i]] = row[i]
+        }
+        data.push(dict)
 
-      const row = []
-      const dict = {}
-      for (var i = 0; i < 6; i++) {
-        row.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(i).innerText)
-        val.push(document.documentElement.querySelectorAll('thead tr th').item(i).innerText)
-        dict[val[i]] = row[i]
       }
-      data.push(dict)
 
-    }
-
-
-    return data
-  });
+      return data
+    })
 
 
-  await browser.close();
+    dataAll.push(pageCt)
+
+  }
+
+  await browser.close()
 
   res.send({
-    pageContent
+    dataAll
   })
+
 });
 const port = 3000;
 
