@@ -1,15 +1,15 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
 
+
 const server = express();
-let x = 0
 
 server.get("/", async (req, res) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const dataAll = []
 
-  for (var y = 1; y <= 53; y++) {
+  for (var y = 1; y <= 2; y++) {
     await page.goto(`http://www.tbca.net.br/base-dados/composicao_alimentos.php?pagina=${y}`);
 
     const pageCt = await page.evaluate(() => {
@@ -23,9 +23,11 @@ server.get("/", async (req, res) => {
         const dict = {}
         for (var i = 0; i < 6; i++) {
           row.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(i).innerText)
+
           val.push(document.documentElement.querySelectorAll('thead tr th').item(i).innerText)
           dict[val[i]] = row[i]
         }
+        console.log(dict)
         data.push(dict)
 
       }
