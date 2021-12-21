@@ -30,7 +30,7 @@ server.get("/", async (req, res) => {
   for (var y = 1; y <= 1; y++) {
     await page.goto(`http://www.tbca.net.br/base-dados/composicao_alimentos.php?pagina=${y}`);
 
-    const pageCt = await page.evaluate(() => {
+    const pageCt = await page.evaluate((aliCol) => {
 
       const data = []
       const val = []
