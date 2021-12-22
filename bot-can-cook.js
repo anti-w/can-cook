@@ -20,7 +20,7 @@ const init = async function () {
   // o objeto data (nome, nomecientifico, grupo, marca)
 
   //laços para percorrer todas as páginas disponíveis
-  for (var y = 1; y < 54; y++) {
+  for (var y = 1; y < 3; y++) {
     //navega para a página
     await page.goto(`http://www.tbca.net.br/base-dados/composicao_alimentos.php?pagina=${y}`)
     //debug
@@ -31,6 +31,8 @@ const init = async function () {
       //quantidade de alimentos por ṕágina na tabela
       const itensPage = document.documentElement.querySelectorAll('tbody tr').length
       const data = {}
+      const codsPage = []
+
       //laço para percorrer toda as linhas da tabela e inserir os dados no firestore
       for (var x = 0; x < itensPage; x++) {
         const newDict = {}
@@ -47,19 +49,41 @@ const init = async function () {
 
           newDict[val[i]] = row[i]
         }
+        codsPage.push(cod)
+
+
+
         //chamda do método exposto lá em cima para adicionar o alimento com o código como ID
-        //window.addDoc(cod, newDict)
+        // window.addDoc(cod, newDict)
 
         data[cod] = newDict
       }
 
       return {
         cod,
-        data
+        data,
+        codsPage
       }
     })
+
+    // console.log(content.codsPage)
+    const contentRef = content.codsPage
+
+    for (var index = 0; index < contentRef.length; index++) {
+      await page.goto(`http://www.tbca.net.br/base-dados/int_composicao_alimentos.php?cod_produto=${contentRef[index]}`)
+      const nutrientes = await page.evaluate(() => {
+
+
+      })
+
+      console.log('Nutrientes data ->', nutrientes)
+
+
+    }
+
   }
 }()
+
 
 
 
