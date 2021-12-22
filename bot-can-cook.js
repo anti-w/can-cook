@@ -20,7 +20,7 @@ const init = async function () {
   // o objeto data (nome, nomecientifico, grupo, marca)
 
   //laços para percorrer todas as páginas disponíveis
-  for (var y = 1; y < 3; y++) {
+  for (var y = 1; y < 54; y++) {
     //navega para a página
     await page.goto(`http://www.tbca.net.br/base-dados/composicao_alimentos.php?pagina=${y}`)
     //debug
@@ -72,11 +72,32 @@ const init = async function () {
     for (var index = 0; index < contentRef.length; index++) {
       await page.goto(`http://www.tbca.net.br/base-dados/int_composicao_alimentos.php?cod_produto=${contentRef[index]}`)
       const nutrientes = await page.evaluate(() => {
+        const itensPage = document.documentElement.querySelectorAll('tbody tr').length
+        const nutri = []
+        const row = []
+        const dict = {}
 
+        for (var x = 0; x < itensPage; x++){
+          const comp = []
+          var val = ''
+            for(var p = 0; p <2; p++){
+              comp.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(p).innerText)
+            }
+            val = comp[0]+' '+comp[1]
+            row.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(2).innerText)
+            
 
+          nutri.push(val)
+          
+          dict[val] = row[x]
+        }
+        
+        return {
+          dict
+        }
       })
-
-      console.log('Nutrientes data ->', nutrientes)
+      
+      // console.log('Nutrientes data ->', nutrientes)
 
 
     }
