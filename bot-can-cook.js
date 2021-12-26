@@ -16,6 +16,9 @@ const init = async function () {
 
   //é necessário expor a função para que possa ter acesso a ela dentro do escopo de .evaluate
   await page.exposeFunction('addDoc', (id, data) => db.doc(id).set(data))
+
+  await page.exposeFunction('upDoc', (id, data) => db.doc(id).update(data))
+
   // função responsável para criar os documentos recebendo o id (código) e 
   // o objeto data (nome, nomecientifico, grupo, marca)
 
@@ -40,6 +43,7 @@ const init = async function () {
         const val = []
 
 
+
         cod = document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(0).innerText
         // criando um objeto key:value com o header e o valor de cada coluna(i) para cada linha(x)
         for (var i = 0; i < 6; i++) {
@@ -54,7 +58,7 @@ const init = async function () {
 
 
         //chamda do método exposto lá em cima para adicionar o alimento com o código como ID
-        // window.addDoc(cod, newDict)
+        window.addDoc(cod, newDict)
 
         data[cod] = newDict
       }
@@ -69,37 +73,38 @@ const init = async function () {
     // console.log(content.codsPage)
     const contentRef = content.codsPage
 
+
     for (var index = 0; index < contentRef.length; index++) {
-      await page.goto(`http://www.tbca.net.br/base-dados/int_composicao_alimentos.php?cod_produto=${contentRef[index]}`)
-      const nutrientes = await page.evaluate(() => {
+      var codigo = contentRef[index]
+      await page.goto(`http://www.tbca.net.br/base-dados/int_composicao_alimentos.php?cod_produto=${codigo}`)
+      const nutrientes = await page.evaluate((codigo) => {
         const itensPage = document.documentElement.querySelectorAll('tbody tr').length
         const nutri = []
         const row = []
         const dict = {}
 
-        for (var x = 0; x < itensPage; x++){
+        for (var x = 0; x < itensPage; x++) {
           const comp = []
           var val = ''
-            for(var p = 0; p <2; p++){
-              comp.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(p).innerText)
-            }
-            val = comp[0]+' '+comp[1]
-            row.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(2).innerText)
-            
+          for (var p = 0; p < 2; p++) {
+            comp.push(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(p).innerText)
+          }
+          val = comp[0] + ' ' + comp[1]
+          row.push(parseFloat(document.documentElement.querySelectorAll('tbody tr').item(x).querySelectorAll('td').item(2).innerText.replace(",", ".")))
+
 
           nutri.push(val)
-          
+
           dict[val] = row[x]
         }
-        
+        window.upDoc(codigo, dict)
+
         return {
-          dict
+          codigo
+
         }
-      })
-      
-      // console.log('Nutrientes data ->', nutrientes)
-
-
+      }, codigo)
+      console.log('Nutrientes data ->', nutrientes.codigo)
     }
 
   }

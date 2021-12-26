@@ -1,10 +1,7 @@
 {
   "dependencies": {
     "expo": "^43.0.4",
-    "express": "^4.17.1",
-    "puppeteer": "^13.0.0",
-    "react": "^17.0.2",
-    "react-native": "^0.66.4"
+    "puppeteer": "^13.0.0"
   },
   "name": "can-cook",
   "version": "1.0.0",
