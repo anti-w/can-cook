@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "expo": "^43.0.4",
+    "mongodb": "^4.4.1",
     "puppeteer": "^13.0.0"
   },
   "name": "can-cook",
